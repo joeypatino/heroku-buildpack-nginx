@@ -128,7 +128,7 @@ erb conf/nginx.conf.erb > conf/nginx.conf
 mkdir -p logs
 touch logs/access.log logs/error.log
 (tail -qF -n 0 --pid=\$\$ logs/*.log &)
-exec nginx -p .
+exec /app/vendor/nginx/bin/nginx -p .
 EOF
 chmod +x "$build_dir/bin/start_nginx"
 echo "done"
