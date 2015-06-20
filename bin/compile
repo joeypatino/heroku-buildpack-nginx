@@ -119,10 +119,11 @@ else
   cp -R "$cache_dir/nginx" "$build_dir/vendor"
 fi
 
-# build a startup script
-echo -n "-----> Creating startup script... "
-mkdir -p "$build_dir/bin"
-cat <<EOF >"$build_dir/bin/start_nginx"
+if [[ ! -f $build_dir/Procfile ]]; then
+  # build a startup script
+  echo -n "-----> Creating startup script... "
+  mkdir -p "$build_dir/bin"
+  cat <<EOF >"$build_dir/bin/start_nginx"
 #!/usr/bin/env bash
 if [ -f _nginx.cfg ]; then
   source _nginx.cfg
@@ -133,8 +134,11 @@ touch logs/access.log logs/error.log
 (tail -qF -n 0 --pid=\$\$ logs/*.log &)
 exec /app/vendor/nginx/bin/nginx -p .
 EOF
-chmod +x "$build_dir/bin/start_nginx"
-echo "done"
+  chmod +x "$build_dir/bin/start_nginx"
+  echo "done"
+else
+  echo -n "-----> Using existing startup script... "
+fi
 
 if [[ ! -f $build_dir/Procfile ]]; then
   echo -n "-----> Creating Procfile... "
