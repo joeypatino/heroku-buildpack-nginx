@@ -71,6 +71,8 @@ fi
 if [ ! $nginx_configure ]; then
   protip "You can set nginx configure options in _nginx.cfg"
   nginx_configure=""
+else
+  info "Requested nginx configure options: $nginx_configure"
 fi
 
 # Load config vars into environment; start with defaults
@@ -85,7 +87,7 @@ mkdir -p "$bin_dir"
 
 # [ "$nginx" == "mainline" ] || [ "$nginx" == "stable" ]
 if ! test -d $cache_dir/nginx || ! test -f $cache_dir/nginx/.heroku/nginx-version || ! test -f $cache_dir/nginx/.heroku/nginx-configure || [ $(cat $cache_dir/nginx/.heroku/nginx-version) != "$nginx_version" ] || [ $(cat $cache_dir/.heroku/nginx-configure) != "$nginx_configure" ]; then
-  info "Nginx version changed since last build; rebuilding."
+  info "Nginx version or configure parameters changed since last build; rebuilding."
 
   # Persist goodies like nginx-version in the slug
   mkdir -p $build_dir/.heroku
