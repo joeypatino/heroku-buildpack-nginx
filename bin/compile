@@ -151,7 +151,7 @@ EOF
   chmod +x "$build_dir/bin/start_nginx"
   echo "done"
 else
-  echo -n "-----> Using existing startup script... "
+  echo "-----> Using existing startup script... "
 fi
 
 if [[ ! -f $build_dir/Procfile ]]; then
@@ -160,7 +160,7 @@ if [[ ! -f $build_dir/Procfile ]]; then
   chmod +x "$build_dir/Procfile"
   echo "done"
 else
-  echo -n "-----> Using existing Procfile... "
+  echo "-----> Using existing Procfile... "
 fi
 
 # Update the PATH
