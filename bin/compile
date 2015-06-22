@@ -133,7 +133,7 @@ else
   cp -R "$cache_dir/nginx" "$build_dir/vendor"
 fi
 
-if [[ ! -f $build_dir/Procfile ]]; then
+if [[ ! -f $build_dir/bin/start_nginx ]]; then
   # build a startup script
   echo -n "-----> Creating startup script... "
   mkdir -p "$build_dir/bin"
@@ -159,6 +159,8 @@ if [[ ! -f $build_dir/Procfile ]]; then
   echo "web: bin/start_nginx" > $build_dir/Procfile
   chmod +x "$build_dir/Procfile"
   echo "done"
+else
+  echo -n "-----> Using existing Procfile... "
 fi
 
 # Update the PATH
