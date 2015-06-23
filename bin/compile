@@ -38,6 +38,10 @@ if [ $NGINX_CONFIGURE ] && [ ! $nginx_configure ]; then
   nginx_configure=$NGINX_CONFIGURE
 fi
 
+if [ $PCRE_VERSION ] && [ ! $pcre_version ]; then
+  pcre_version=$PCRE_VERSION
+fi
+
 # Recommend using semver ranges in a safe manner
 if [ ! $nginx_version ]; then
   protip "You can specify a Nginx version in _nginx.cfg"
@@ -68,6 +72,16 @@ else
   info "Requested nginx version: $nginx_version"
 fi
 
+if [ "$pcre_version" == "" ]; then
+  pcre_version="8.36"
+  pcre_url="http://garr.dl.sourceforge.net/project/pcre/pcre/${pcre_version}/pcre-${pcre_version}.tar.bz2"
+  info "Defaulting to version $pcre_version from $pcre_url."
+else
+  pcre_url="http://garr.dl.sourceforge.net/project/pcre/pcre/${pcre_version}/pcre-${pcre_version}.tar.bz2"
+  info "Requested pcre version: $pcre_version"
+fi
+
+
 if [ ! $nginx_configure ]; then
   protip "You can set nginx configure options in _nginx.cfg"
   nginx_configure=""
@@ -86,7 +100,7 @@ bin_dir=$build_dir/vendor/nginx
 mkdir -p "$bin_dir"
 
 # [ "$nginx" == "mainline" ] || [ "$nginx" == "stable" ]
-if ! test -d $cache_dir/nginx || ! test -f $cache_dir/nginx/.heroku/nginx-version || ! test -f $cache_dir/nginx/.heroku/nginx-configure || [ $(cat $cache_dir/nginx/.heroku/nginx-version) != "$nginx_version" ] || [ $(cat $cache_dir/nginx/.heroku/nginx-configure) != "$nginx_configure" ]; then
+if ! test -d $cache_dir/nginx || ! test -f $cache_dir/nginx/.heroku/pcre-version || ! test -f $cache_dir/nginx/.heroku/nginx-version || ! test -f $cache_dir/nginx/.heroku/nginx-configure || [ $(cat $cache_dir/nginx/.heroku/pcre-version) != "$pcre_version" ] || [ $(cat $cache_dir/nginx/.heroku/nginx-version) != "$nginx_version" ] || [ $(cat $cache_dir/nginx/.heroku/nginx-configure) != "$nginx_configure" ]; then
   info "Nginx version or configure parameters changed since last build; rebuilding."
 
   # Persist goodies like nginx-version in the slug
@@ -98,6 +112,9 @@ if ! test -d $cache_dir/nginx || ! test -f $cache_dir/nginx/.heroku/nginx-versio
   # Save resolved Nginx configure options in the slug for later reference
   echo $nginx_configure > $build_dir/.heroku/nginx-configure
 
+  # Save resolved PCRE version in the slug for later reference
+  echo $pcre_version > $build_dir/.heroku/pcre-version
+
   # Purge nginx-related cached content, being careful not to purge the top-level
   # cache, for the sake of heroku-buildpack-multi apps.
   info "Cleaning cached Nginx version..."
@@ -108,9 +125,12 @@ if ! test -d $cache_dir/nginx || ! test -f $cache_dir/nginx/.heroku/nginx-versio
   cd "$build_dir"
   cd $nginx_src_dir
 
+  echo "Downloading $pcre_url"
+  (cd $nginx_src_dir && curl -L $pcre_url | tar xvj )
+
   head "Compiling Nginx..."
   head "Configuring"
-  ./configure $nginx_configure 2>&1 | indent
+  ./configure --with-pcre=pcre-${pcre_version} $nginx_configure 2>&1 | indent
   head "Compiling with Make"
   make 2>&1 | indent
   head "Moving generated binary"
