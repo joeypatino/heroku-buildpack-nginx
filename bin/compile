@@ -126,7 +126,7 @@ if ! test -d $cache_dir/nginx || ! test -f $cache_dir/nginx/.heroku/pcre-version
   cd $nginx_src_dir
 
   echo "Downloading $pcre_url"
-  (cd $nginx_src_dir && curl -L $pcre_url | tar xvj )
+  (curl -L $pcre_url | tar xvj )
 
   head "Compiling Nginx..."
   head "Configuring"
