@@ -76,6 +76,8 @@ if [ "$pcre_version" == "" ]; then
   pcre_version="8.36"
   pcre_url="http://garr.dl.sourceforge.net/project/pcre/pcre/${pcre_version}/pcre-${pcre_version}.tar.bz2"
   info "Defaulting to version $pcre_version from $pcre_url."
+elif [ "$pcre_version" == "system" ]; then
+  info "Using system pcre version"
 else
   pcre_url="http://garr.dl.sourceforge.net/project/pcre/pcre/${pcre_version}/pcre-${pcre_version}.tar.bz2"
   info "Requested pcre version: $pcre_version"
@@ -125,12 +127,17 @@ if ! test -d $cache_dir/nginx || ! test -f $cache_dir/nginx/.heroku/pcre-version
   cd "$build_dir"
   cd $nginx_src_dir
 
-  echo "Downloading $pcre_url"
-  (curl -L $pcre_url | tar xvj )
+  if [ "$pcre_version" != "system" ]; then
+    configure_options="--with-pcre=pcre-${pcre_version} $nginx_configure"
+    echo "Downloading $pcre_url"
+    (curl -L $pcre_url | tar xvj )
+  else
+    configure_options=$nginx_configure
+  fi
 
   head "Compiling Nginx..."
-  head "Configuring"
-  ./configure --with-pcre=pcre-${pcre_version} $nginx_configure 2>&1 | indent
+  head "Configuring with $configure_options"
+  ./configure $configure_options 2>&1 | indent
   head "Compiling with Make"
   make 2>&1 | indent
   head "Moving generated binary"
