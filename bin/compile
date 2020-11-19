@@ -74,12 +74,12 @@ fi
 
 if [ "$pcre_version" == "" ]; then
   pcre_version="8.36"
-  pcre_url="http://garr.dl.sourceforge.net/project/pcre/pcre/${pcre_version}/pcre-${pcre_version}.tar.bz2"
+  pcre_url="https://ftp.pcre.org/pub/pcre/${pcre_version}/pcre-${pcre_version}.tar.bz2"
   info "Defaulting to version $pcre_version from $pcre_url."
 elif [ "$pcre_version" == "system" ]; then
   info "Using system pcre version"
 else
-  pcre_url="http://garr.dl.sourceforge.net/project/pcre/pcre/${pcre_version}/pcre-${pcre_version}.tar.bz2"
+  pcre_url="https://ftp.pcre.org/pub/pcre/${pcre_version}/pcre-${pcre_version}.tar.bz2"
   info "Requested pcre version: $pcre_version"
 fi
 

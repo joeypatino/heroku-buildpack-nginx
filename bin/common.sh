@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 error() {
   echo " !     $*" >&2
   exit 1
@@ -17,14 +19,14 @@ warning() {
   tip=$1
   url=$2
   echo "WARNING: $tip" >> $warnings
-  echo "${url:-https://github.com/abhishekmunie/heroku-buildpack-nginx}" >> $warnings
+  echo "${url:-https://github.com/joeypatino/heroku-buildpack-nginx}" >> $warnings
   echo "" >> $warnings
 }
 
 protip() {
   echo
   echo "PRO TIP: $*" | indent
-  echo "See https://github.com/abhishekmunie/heroku-buildpack-git" | indent
+  echo "See https://github.com/joeypatino/heroku-buildpack-nginx" | indent
   echo
 }
 
@@ -33,7 +35,7 @@ build_failed() {
   echo ""
   cat $warnings | indent
   info "We're sorry this build is failing! If you can't find the issue in application code,"
-  info "please open an inssue so we can help: https://github.com/abhishekmunie/heroku-buildpack-nginx/issues"
+  info "please open an inssue so we can help: https://github.com/joeypatino/heroku-buildpack-nginx/issues"
 }
 
 file_contents() {
