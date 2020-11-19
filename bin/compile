@@ -56,24 +56,16 @@ fi
 
 # Output info about requested version and resolved Nginx version
 if [ "$nginx_version" == "" ]; then
-  nginx_version="1.7.9"
-  nginx_url="http://nginx.org/download/nginx-1.7.9.tar.gz"
-  info "Defaulting to version 1.7.9."
-# elif [ "$nginx_version" == "mainline" ]; then
-#   nginx_version="mainline"
-#   nginx_url="http://nginx.org/download/nginx-1.7.9.tar.gz"
-#   info "Requested nginx version: mainline - $nginx_version"
-# elif [ "$nginx_version" == "stable" ]; then
-#   nginx_version="stable"
-#   nginx_url="http://nginx.org/download/nginx-1.7.9.tar.gz"
-#   info "Requested nginx version: mainline - $nginx_version"
+  nginx_version="1.18.0"
+  nginx_url="http://nginx.org/download/nginx-${nginx_version}.tar.gz"
+  info "Defaulting to version ${nginx_version}"
 else
   nginx_url="http://nginx.org/download/nginx-$nginx_version.tar.gz"
   info "Requested nginx version: $nginx_version"
 fi
 
 if [ "$pcre_version" == "" ]; then
-  pcre_version="8.36"
+  pcre_version="8.44"
   pcre_url="https://ftp.pcre.org/pub/pcre/pcre-${pcre_version}.tar.bz2"
   info "Defaulting to version $pcre_version from $pcre_url."
 elif [ "$pcre_version" == "system" ]; then
