@@ -171,7 +171,7 @@ mkdir -p logs
 
 touch logs/access.log logs/error.log
 (tail -qF -n 0 --pid=\$\$ logs/*.log &)
-exec /app/vendor/nginx/bin/nginx -p .
+exec /app/bin/nginx -p .
 
 EOF
 
