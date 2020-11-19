@@ -94,7 +94,8 @@ bin_dir=$build_dir/vendor/nginx
 mkdir -p "$bin_dir"
 
 # [ "$nginx" == "mainline" ] || [ "$nginx" == "stable" ]
-if ! test -d $cache_dir/nginx || ! test -f $cache_dir/nginx/.heroku/pcre-version || ! test -f $cache_dir/nginx/.heroku/nginx-version || ! test -f $cache_dir/nginx/.heroku/nginx-configure || [ $(cat $cache_dir/nginx/.heroku/pcre-version) != "$pcre_version" ] || [ $(cat $cache_dir/nginx/.heroku/nginx-version) != "$nginx_version" ] || [ $(cat $cache_dir/nginx/.heroku/nginx-configure) != "$nginx_configure" ]; then
+# || [ $(cat $cache_dir/nginx/.heroku/nginx-configure) != "$nginx_configure" ];
+if ! test -d $cache_dir/nginx || ! test -f $cache_dir/nginx/.heroku/pcre-version || ! test -f $cache_dir/nginx/.heroku/nginx-version || ! test -f $cache_dir/nginx/.heroku/nginx-configure || [ $(cat $cache_dir/nginx/.heroku/pcre-version) != "$pcre_version" ] || [ $(cat $cache_dir/nginx/.heroku/nginx-version) != "$nginx_version" ]; then
   info "Nginx version or configure parameters changed since last build; rebuilding."
 
   # Persist goodies like nginx-version in the slug
@@ -104,7 +105,7 @@ if ! test -d $cache_dir/nginx || ! test -f $cache_dir/nginx/.heroku/pcre-version
   echo $nginx_version > $build_dir/.heroku/nginx-version
 
   # Save resolved Nginx configure options in the slug for later reference
-  echo $nginx_configure > $build_dir/.heroku/nginx-configure
+  #echo $nginx_configure > $build_dir/.heroku/nginx-configure
 
   # Save resolved PCRE version in the slug for later reference
   echo $pcre_version > $build_dir/.heroku/pcre-version
