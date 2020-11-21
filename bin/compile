@@ -183,7 +183,7 @@ fi
 
 if [[ ! -f $build_dir/Procfile ]]; then
   echo -n "-----> Creating Procfile... "
-  echo "web: bin/start_nginx" > $build_dir/Procfile
+  echo "worker: bin/start_nginx" > $build_dir/Procfile
   chmod +x "$build_dir/Procfile"
   echo "done"
 else
